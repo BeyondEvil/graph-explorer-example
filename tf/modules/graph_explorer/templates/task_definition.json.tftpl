@@ -1,0 +1,69 @@
+[
+  {
+    "name": "${app_name}",
+    "image": "public.ecr.aws/neptune/graph-explorer:${image_tag}",
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": ${container_port},
+        "hostPort": ${container_port},
+        "protocol": "tcp",
+        "appProtocol": "http"
+      },
+      {
+        "containerPort": ${https_port},
+        "hostPort": ${https_port},
+        "protocol": "tcp",
+        "appProtocol": "http"
+      }
+    ],
+    "environment": [
+      {
+        "name": "AWS_REGION",
+        "value": "${region}"
+      },
+      {
+        "name": "GRAPH_CONNECTION_URL",
+        "value": "${neptune_ro_endpoint}"
+      },
+      {
+        "name": "GRAPH_EXP_HTTPS_CONNECTION",
+        "value": "true"
+      },
+      {
+        "name": "GRAPH_TYPE",
+        "value": "opencypher"
+      },
+      {
+        "name": "HOST",
+        "value": "localhost"
+      },
+      {
+        "name": "IAM",
+        "value": "true"
+      },
+      {
+        "name": "PROXY_SERVER_HTTPS_CONNECTION",
+        "value": "true"
+      },
+      {
+        "name": "PUBLIC_OR_PROXY_ENDPOINT",
+        "value": "https://${alb_fqdn}"
+      },
+      {
+        "name": "USING_PROXY_SERVER",
+        "value": "true"
+      }
+    ],
+    "mountPoints": [],
+    "volumesFrom": [],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "${log_group}",
+        "awslogs-region": "${region}",
+        "awslogs-stream-prefix": "smi"
+      }
+    }
+  }
+]
